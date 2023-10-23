@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -43,10 +44,13 @@ public class JWTUtils {
                 .getBody();
     }
 
-    public String generateToken(String username, Map<String, Object> claims){
+    public String generateToken(UserDetails userDetails){
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("password", userDetails.getPassword());
+        claims.put("role", userDetails.getAuthorities().toArray()[0]);
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(Keys.hmacShaKeyFor(key.getBytes()), SignatureAlgorithm.HS256)

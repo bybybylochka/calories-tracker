@@ -33,6 +33,6 @@ public class AppUserService implements UserDetailsService {
         }  else if(optionalEditor.isPresent()) {
             return optionalEditor.get();
         }
-        else throw new UsernameNotFoundException("user not found!");
+        else return null;
     }
 }
