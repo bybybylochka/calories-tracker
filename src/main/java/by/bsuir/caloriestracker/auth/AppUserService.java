@@ -4,6 +4,7 @@ import by.bsuir.caloriestracker.models.Admin;
 import by.bsuir.caloriestracker.models.Editor;
 import by.bsuir.caloriestracker.models.User;
 import by.bsuir.caloriestracker.repository.AdminRepository;
+import by.bsuir.caloriestracker.repository.ArticleRepository;
 import by.bsuir.caloriestracker.repository.EditorRepository;
 import by.bsuir.caloriestracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
