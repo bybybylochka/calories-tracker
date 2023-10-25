@@ -1,10 +1,7 @@
 package by.bsuir.caloriestracker.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class WeightHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

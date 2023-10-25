@@ -2,6 +2,7 @@ package by.bsuir.caloriestracker.auth;
 
 import by.bsuir.caloriestracker.models.AuthorizationData;
 import by.bsuir.caloriestracker.models.User;
+import by.bsuir.caloriestracker.repository.AuthorizationDataRepository;
 import by.bsuir.caloriestracker.repository.UserRepository;
 import by.bsuir.caloriestracker.request.AuthenticationRequest;
 import by.bsuir.caloriestracker.response.AuthenticationResponse;
@@ -18,6 +19,7 @@ public class AuthenticationService {
     private final AppUserService appUserService;
     private final JWTUtils jwtUtils;
     private final UserRepository userRepository;
+    private final AuthorizationDataRepository authDataRepository;
 
     public AuthenticationResponse authorize(AuthenticationRequest authenticationRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -35,6 +37,7 @@ public class AuthenticationService {
                     .login(authenticationRequest.getUsername())
                     .password(authenticationRequest.getPassword())
                     .build();
+            authDataRepository.save(authData);
             User user = userRepository.save(User.builder().authorizationData(authData).build());
             String token = jwtUtils.generateToken(user);
             return new AuthenticationResponse(token);
