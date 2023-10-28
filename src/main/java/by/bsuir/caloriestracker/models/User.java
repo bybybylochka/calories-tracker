@@ -28,7 +28,7 @@ public class User implements UserDetails {
     private List<ConsumedProduct> consumptionHistory;
     @ManyToMany
     private List<Recipe> favouriteRecipes;
-    private boolean enabled = false;
+    private boolean enabled = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

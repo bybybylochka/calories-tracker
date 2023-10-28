@@ -9,6 +9,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class WeightHistoryService {
     private final WeightHistoryRepository weightHistoryRepository;
+
+    public WeightHistory findById(long id){
+        return weightHistoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Weight history with this id not found"));
+    }
     public void addWeightInHistory(WeightHistory weightHistory){
         weightHistoryRepository.save(weightHistory);
     }

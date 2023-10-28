@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 public class WeightHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

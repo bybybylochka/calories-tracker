@@ -1,7 +1,9 @@
 package by.bsuir.caloriestracker.models.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum GoalType {
     LOSING_WEIGHT(" losing weight"),

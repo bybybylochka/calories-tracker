@@ -1,5 +1,6 @@
 package by.bsuir.caloriestracker.auth;
 
+import by.bsuir.caloriestracker.auth.service.AppUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,6 +1,6 @@
 package by.bsuir.caloriestracker.auth;
 
-import lombok.AllArgsConstructor;
+import by.bsuir.caloriestracker.auth.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package by.bsuir.caloriestracker.auth;
+package by.bsuir.caloriestracker.auth.service;
 
 import by.bsuir.caloriestracker.models.Admin;
 import by.bsuir.caloriestracker.models.Editor;

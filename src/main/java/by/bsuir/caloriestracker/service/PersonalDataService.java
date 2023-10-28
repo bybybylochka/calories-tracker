@@ -20,6 +20,7 @@ import java.util.List;
 public class PersonalDataService {
     private final PersonalDataRepository personalDataRepository;
     private final WeightHistoryService weightHistoryService;
+    private final UserService userService;
 
     public PersonalData findById(long id) {
         return personalDataRepository.findById(id)
@@ -34,26 +35,49 @@ public class PersonalDataService {
         return new EnumResponse(descriptions);
     }
 
-    // TODO: сделать аналогичные геттеры для остальных енамов
+    public EnumResponse getGender(){
+        List<String> descriptions = new ArrayList<>();
+        for(Gender gender: Gender.values()){
+            descriptions.add(gender.getDescription());
+        }
+        return new EnumResponse(descriptions);
+    }
+
+    public EnumResponse getGoalType(){
+        List<String> descriptions = new ArrayList<>();
+        for(GoalType type: GoalType.values()){
+            descriptions.add(type.getDescription());
+        }
+        return new EnumResponse(descriptions);
+    }
 
     public PersonalData addPersonalData(long userId, PersonalDataRequest personalDataRequest) {
         List<WeightHistory> weightHistoryList = new ArrayList<>();
-        WeightHistory weightHistory = WeightHistory.builder()
-                .weightInDate(LocalDate.now())
-                .weight(personalDataRequest.getWeight())
-                .build();
-        weightHistoryService.addWeightInHistory(weightHistory);
-        // возмножно нужно будет потом добавить ссылку на PersonalData ???
+        WeightHistory weightHistory = buildWeightHistory(personalDataRequest);
         weightHistoryList.add(weightHistory);
-        PersonalData personalData = PersonalData.builder()
-                .name(personalDataRequest.getName())
-                .gender(Gender.getGender(personalDataRequest.getGender()))
-                .activityType(ActivityType.getActivityType(personalDataRequest.getActivityType()))
-                .goalType(GoalType.getGoalType(personalDataRequest.getGoalType()))
-                .height(personalDataRequest.getHeight())
-                .weightHistory(weightHistoryList)
-                .desiredWeight(personalDataRequest.getDesiredWeight())
-                .build();
+        PersonalData personalData = buildPersonalData(personalDataRequest, weightHistoryList);
+        weightHistory.toBuilder().personalData(personalData).build();
+        weightHistoryService.addWeightInHistory(weightHistory);
+        userService.addPersonalData(userId, personalData);
         return personalDataRepository.save(personalData);
+    }
+
+    private WeightHistory buildWeightHistory(PersonalDataRequest request){
+        return WeightHistory.builder()
+                .weightInDate(LocalDate.now())
+                .weight(request.getWeight())
+                .build();
+    }
+
+    private PersonalData buildPersonalData (PersonalDataRequest request, List<WeightHistory> weightHistoryList){
+        return PersonalData.builder()
+                .name(request.getName())
+                .gender(Gender.getGender(request.getGender()))
+                .activityType(ActivityType.getActivityType(request.getActivityType()))
+                .goalType(GoalType.getGoalType(request.getGoalType()))
+                .height(request.getHeight())
+                .weightHistory(weightHistoryList)
+                .desiredWeight(request.getDesiredWeight())
+                .build();
     }
 }
