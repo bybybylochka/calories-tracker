@@ -2,7 +2,6 @@ package by.bsuir.caloriestracker.models;
 
 import by.bsuir.caloriestracker.models.builder.KbjuBuilder;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,12 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Kbju {
     private int calories;
-    private double proteins;
-    private double carbohydrates;
-    private double fats;
+    private int proteins;
+    private int carbohydrates;
+    private int fats;
 
     public static KbjuBuilder builder() {
         return new KbjuBuilder();
     }
-
 }

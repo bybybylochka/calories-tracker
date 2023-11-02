@@ -16,10 +16,8 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    private int calories;
-    private float proteins;
-    private float fats;
-    private float carbs;
+    @Embedded
+    private Kbju kbju;
     @OneToMany(mappedBy = "product")
     private List<ConsumedProduct> consumptionHistory;
 }
