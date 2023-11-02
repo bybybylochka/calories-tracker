@@ -1,18 +1,12 @@
 package by.bsuir.caloriestracker.auth.service;
 
 import by.bsuir.caloriestracker.auth.JWTUtils;
-import by.bsuir.caloriestracker.auth.service.AppUserService;
-import by.bsuir.caloriestracker.models.AuthorizationData;
-import by.bsuir.caloriestracker.models.User;
-import by.bsuir.caloriestracker.repository.AuthorizationDataRepository;
-import by.bsuir.caloriestracker.repository.UserRepository;
 import by.bsuir.caloriestracker.request.AuthenticationRequest;
 import by.bsuir.caloriestracker.response.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component

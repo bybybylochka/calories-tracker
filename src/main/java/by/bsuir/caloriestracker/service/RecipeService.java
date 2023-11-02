@@ -1,21 +1,16 @@
 package by.bsuir.caloriestracker.service;
 
-import by.bsuir.caloriestracker.models.Article;
 import by.bsuir.caloriestracker.models.Kbju;
 import by.bsuir.caloriestracker.models.Product;
 import by.bsuir.caloriestracker.models.Recipe;
-import by.bsuir.caloriestracker.repository.ProductRepository;
 import by.bsuir.caloriestracker.repository.RecipeRepository;
-import by.bsuir.caloriestracker.request.ArticleRequest;
 import by.bsuir.caloriestracker.request.RecipeRequest;
-import by.bsuir.caloriestracker.response.ProductResponse;
 import by.bsuir.caloriestracker.response.RecipeResponse;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -43,7 +38,7 @@ public class RecipeService {
     public Kbju getKbju(long recipeId) {
         Recipe recipe = findById(recipeId);
         int totalCalories = 0, totalCarbs = 0, totalProteins = 0, totalFats = 0;
-        for(Map.Entry<Product, Float> entry : recipe.getIngredients().entrySet()) {
+        for(Map.Entry<Product, Integer> entry : recipe.getIngredients().entrySet()) {
             Product product = entry.getKey();
             totalCalories += product.getKbju().getCalories();
             totalCarbs += product.getKbju().getCarbohydrates();
@@ -53,7 +48,7 @@ public class RecipeService {
         return new Kbju(totalCalories, totalProteins, totalCarbs, totalFats);
     }
 
-    private Map<Product, Float> mapIngredients(RecipeRequest request){
+    private Map<Product, Integer> mapIngredients(RecipeRequest request){
         return request.getIngredients().entrySet()
                 .stream()
                 .collect(Collectors.toMap(entry ->

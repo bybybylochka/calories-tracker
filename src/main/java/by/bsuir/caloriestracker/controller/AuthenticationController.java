@@ -5,10 +5,8 @@ import by.bsuir.caloriestracker.request.AuthenticationRequest;
 import by.bsuir.caloriestracker.response.AuthenticationResponse;
 import by.bsuir.caloriestracker.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

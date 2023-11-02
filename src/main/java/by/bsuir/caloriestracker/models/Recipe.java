@@ -24,7 +24,7 @@ public class Recipe {
     @CollectionTable(name = "recipe_product")
     @MapKeyColumn(name = "product_id")
     @Column(name = "weight")
-    private Map<Product, Float> ingredients;
+    private Map<Product, Integer> ingredients;
     private String instruction;
     @ManyToOne
     private Editor editor;

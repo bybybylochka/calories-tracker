@@ -12,7 +12,7 @@ public class RecipeRequest {
     private String title;
     private int cookingTime;
     private int servingCount;
-    private Map<Long, Float> ingredients;
+    private Map<Long, Integer> ingredients;
     private String instruction;
     private long editorId;
 }
