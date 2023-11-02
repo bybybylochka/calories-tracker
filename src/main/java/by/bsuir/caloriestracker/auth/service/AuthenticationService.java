@@ -21,9 +21,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final AppUserService appUserService;
     private final JWTUtils jwtUtils;
-    private final UserRepository userRepository;
-    private final AuthorizationDataRepository authDataRepository;
-    private final PasswordEncoder passwordEncoder;
+
 
     public AuthenticationResponse authorize(AuthenticationRequest authenticationRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -35,17 +33,4 @@ public class AuthenticationService {
         return new AuthenticationResponse(token);
     };
 
-    public AuthenticationResponse register(AuthenticationRequest authenticationRequest) {
-        if(appUserService.loadUserByUsername(authenticationRequest.getUsername())==null){
-            AuthorizationData authData = AuthorizationData.builder()
-                    .login(authenticationRequest.getUsername())
-                    .password(passwordEncoder.encode(authenticationRequest.getPassword()))
-                    .build();
-            authDataRepository.save(authData);
-            User user = userRepository.save(User.builder().authorizationData(authData).build());
-            String token = jwtUtils.generateToken(user);
-            return new AuthenticationResponse(token);
-        }
-        else throw new IllegalArgumentException("user with this username already exists!");
-    }
 }

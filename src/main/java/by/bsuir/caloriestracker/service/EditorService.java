@@ -40,7 +40,8 @@ public class EditorService {
         editor.setArticles(articles);
         editorRepository.save(editor);
     }
-    public void addRecipe(long editorId, Recipe recipe){
+
+    public void addRecipe (long editorId, Recipe recipe) {
         Editor editor = findById(editorId);
         List<Recipe> recipes = editor.getRecipes();
         recipes.add(recipe);

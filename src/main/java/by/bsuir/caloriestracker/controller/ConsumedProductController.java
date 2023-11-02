@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/consumed_product")
+@RequestMapping("/consumed-product")
 public class ConsumedProductController {
     private final ConsumedProductService consumedProductService;
     @PostMapping("/add")
@@ -17,7 +17,7 @@ public class ConsumedProductController {
         return consumedProductService.addConsumedProduct(request);
     }
 
-    @GetMapping("")
+    @GetMapping
     public ConsumedProductResponse getAllConsumedProducts(){
         return consumedProductService.findAll();
     }

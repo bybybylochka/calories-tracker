@@ -10,6 +10,7 @@ public class PersonalDataRequest {
     private String goalType;
     private float weight;
     private float height;
+    private int age;
     private float desiredWeight;
 
 }

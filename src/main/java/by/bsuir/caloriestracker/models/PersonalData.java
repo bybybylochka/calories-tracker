@@ -28,5 +28,8 @@ public class PersonalData {
     @OneToMany(mappedBy = "personalData")
     private List<WeightHistory> weightHistory;
     private float height;
+    private int age;
+    @Embedded
+    private Kbju norm;
     private float desiredWeight;
 }

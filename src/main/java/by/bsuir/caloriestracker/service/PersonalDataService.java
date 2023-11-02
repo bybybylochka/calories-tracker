@@ -78,6 +78,7 @@ public class PersonalDataService {
                 .height(request.getHeight())
                 .weightHistory(weightHistoryList)
                 .desiredWeight(request.getDesiredWeight())
+                .age(request.getAge())
                 .build();
     }
 }

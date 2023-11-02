@@ -6,11 +6,15 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum GoalType {
-    LOSING_WEIGHT(" losing weight"),
-    MASS_GAIN(" mass gain"),
-    MAINTAINING_WEIGHT(" maintaining weight");
+    LOSING_WEIGHT(" losing weight", 0.85, 0.35, 0.35, 0.25),
+    MAINTAINING_WEIGHT(" maintaining weight", 1, 0.3, 0.4, 0.3),
+    MASS_GAIN(" mass gain", 1.15, 0.4, 0.45, 0.15);
 
-    private String description;
+    private final String description;
+    private final double metabolismCoefficient;
+    private final double proteinsCoefficient;
+    private final double carbsCoefficient;
+    private final double fatsCoefficient;
 
     public static GoalType getGoalType (String description){
         for(GoalType type : GoalType.values()) {
