@@ -21,6 +21,7 @@ public class PersonalDataService {
     private final PersonalDataRepository personalDataRepository;
     private final WeightHistoryService weightHistoryService;
     private final UserService userService;
+    private final CaloriesCalculationService caloriesCalculationService;
 
     public PersonalData findById(long id) {
         return personalDataRepository.findById(id)
@@ -70,7 +71,7 @@ public class PersonalDataService {
     }
 
     private PersonalData buildPersonalData (PersonalDataRequest request, List<WeightHistory> weightHistoryList){
-        return PersonalData.builder()
+        PersonalData personalData = PersonalData.builder()
                 .name(request.getName())
                 .gender(Gender.getGender(request.getGender()))
                 .activityType(ActivityType.getActivityType(request.getActivityType()))
@@ -80,5 +81,8 @@ public class PersonalDataService {
                 .desiredWeight(request.getDesiredWeight())
                 .age(request.getAge())
                 .build();
+        personalData.toBuilder().norm(caloriesCalculationService.calculateNorm(personalData));
+        return personalData;
     }
+
 }

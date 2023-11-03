@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class CaloriesCalculationService {
-    private final PersonalDataService personalDataService;
+    // private final PersonalDataService personalDataService;
 
     public Kbju calculateNorm(PersonalData personalData) {
         double basalMetabolismWithoutActivity = calculateBasalMetabolism(personalData);

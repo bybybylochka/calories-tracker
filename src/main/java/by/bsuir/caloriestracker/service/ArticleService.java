@@ -8,6 +8,7 @@ import by.bsuir.caloriestracker.repository.EditorRepository;
 import by.bsuir.caloriestracker.request.ArticleRequest;
 import by.bsuir.caloriestracker.response.AdminResponse;
 import by.bsuir.caloriestracker.response.ArticleResponse;
+import by.bsuir.caloriestracker.response.RecipeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -41,5 +42,8 @@ public class ArticleService {
                 .publicationTime(LocalDateTime.now())
                 .editor(editorService.findById(request.getEditorId()))
                 .build();
+    }
+    public ArticleResponse findArticlesByEditor(long editorId){
+        return new ArticleResponse(articleRepository.findAllByEditor(editorService.findById(editorId)));
     }
 }

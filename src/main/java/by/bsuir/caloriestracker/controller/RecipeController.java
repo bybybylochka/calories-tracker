@@ -5,10 +5,7 @@ import by.bsuir.caloriestracker.request.RecipeRequest;
 import by.bsuir.caloriestracker.response.RecipeResponse;
 import by.bsuir.caloriestracker.service.RecipeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +20,9 @@ public class RecipeController {
     @GetMapping("")
     public RecipeResponse getAllRecipes(RecipeRequest request){
         return recipeService.findAll();
+    }
+    @GetMapping("/get/author/{editorId}")
+    public RecipeResponse getRecipesByEditor(@PathVariable long editorId){
+        return recipeService.findRecipesByEditor(editorId);
     }
 }

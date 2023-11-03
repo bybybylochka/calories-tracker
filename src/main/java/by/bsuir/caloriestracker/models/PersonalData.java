@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 public class PersonalData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,7 +5,6 @@ import by.bsuir.caloriestracker.models.Article;
 import by.bsuir.caloriestracker.request.ArticleRequest;
 import by.bsuir.caloriestracker.response.ArticleResponse;
 import by.bsuir.caloriestracker.service.ArticleService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,5 +22,9 @@ public class ArticleController {
     @GetMapping("")
     public ArticleResponse getAllArticles(){
         return articleService.findAll();
+    }
+    @GetMapping("/get/author/{editorId}")
+    public ArticleResponse getArticlesByEditor(@PathVariable long editorId){
+        return articleService.findArticlesByEditor(editorId);
     }
 }
