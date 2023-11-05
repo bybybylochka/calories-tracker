@@ -20,5 +20,5 @@ public class ConsumedProduct {
     private User user;
     @ManyToOne
     private Product product;
-    private float weight;
+    private int weight;
 }

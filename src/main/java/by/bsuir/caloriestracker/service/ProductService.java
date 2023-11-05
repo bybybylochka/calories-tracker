@@ -1,6 +1,7 @@
 package by.bsuir.caloriestracker.service;
 
 import by.bsuir.caloriestracker.models.Editor;
+import by.bsuir.caloriestracker.models.Kbju;
 import by.bsuir.caloriestracker.models.Product;
 import by.bsuir.caloriestracker.repository.EditorRepository;
 import by.bsuir.caloriestracker.repository.ProductRepository;
@@ -29,12 +30,15 @@ public class ProductService {
     }
 
     private Product buildProduct(ProductRequest request){
-        return Product.builder()
-                .name(request.getName())
+        Kbju kbju = Kbju.builder()
                 .calories(request.getCalories())
                 .proteins(request.getProteins())
-                .carbs(request.getCarbs())
+                .carbohydrates(request.getCarbs())
                 .fats(request.getFats())
+                .build();
+        return Product.builder()
+                .name(request.getName())
+                .kbju(kbju)
                 .build();
     }
 }

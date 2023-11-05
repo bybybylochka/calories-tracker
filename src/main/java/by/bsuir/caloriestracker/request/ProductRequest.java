@@ -6,7 +6,7 @@ import lombok.Getter;
 public class ProductRequest {
     private String name;
     private int calories;
-    private float proteins;
-    private float fats;
-    private float carbs;
+    private int proteins;
+    private int fats;
+    private int carbs;
 }

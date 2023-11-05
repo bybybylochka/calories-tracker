@@ -6,5 +6,5 @@ import lombok.Getter;
 public class ConsumedProductRequest {
     private long userId;
     private long productId;
-    private float weight;
+    private int weight;
 }
