@@ -1,7 +1,7 @@
 package by.bsuir.caloriestracker.auth.service;
 
 import by.bsuir.caloriestracker.auth.JWTUtils;
-import by.bsuir.caloriestracker.request.AuthenticationRequest;
+import by.bsuir.caloriestracker.request.UserAuthenticationRequest;
 import by.bsuir.caloriestracker.response.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +17,7 @@ public class AuthenticationService {
     private final JWTUtils jwtUtils;
 
 
-    public AuthenticationResponse authorize(AuthenticationRequest authenticationRequest) {
+    public AuthenticationResponse authorize(UserAuthenticationRequest authenticationRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUsername(), authenticationRequest.getPassword()
         );
