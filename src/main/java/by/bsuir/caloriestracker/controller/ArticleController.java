@@ -23,8 +23,8 @@ public class ArticleController {
     public ArticleResponse getAllArticles(){
         return articleService.findAll();
     }
-    @GetMapping("/get/author/{editorId}")
-    public ArticleResponse getArticlesByEditor(@PathVariable long editorId){
-        return articleService.findArticlesByEditor(editorId);
+    @GetMapping("/get/author")
+    public ArticleResponse getArticlesByEditor(){
+        return articleService.findArticlesByEditor();
     }
 }

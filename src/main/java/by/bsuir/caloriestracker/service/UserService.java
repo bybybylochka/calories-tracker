@@ -33,12 +33,12 @@ public class UserService {
         return new UserResponse(userRepository.findAll());
     }
 
-    public PersonalData findPersonalData(long userId) {
-        return findById(userId).getPersonalData();
+    public PersonalData findPersonalData(User user) {
+        return user.getPersonalData();
     }
 
-    public void addPersonalData(long userId, PersonalData personalData) {
-        User user = findById(userId);
+    public void addPersonalData(PersonalData personalData) {
+        User user = getCurrentUser();
         user.setPersonalData(personalData);
         userRepository.save(user);
     }
@@ -55,7 +55,7 @@ public class UserService {
         return currentUser.getFavouriteRecipes();
     }
 
-    private User getCurrentUser() {
+    public User getCurrentUser() {
         Authentication currentAuthentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) currentAuthentication.getPrincipal()).getUsername();
         return findByUsername(username);

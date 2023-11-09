@@ -6,6 +6,8 @@ import by.bsuir.caloriestracker.models.enums.GoalType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -28,7 +30,7 @@ public class PersonalData {
     @OneToMany(mappedBy = "personalData")
     private List<WeightHistory> weightHistory;
     private float height;
-    private int age;
+    private LocalDate dateOfBirth;
     @Embedded
     private Kbju norm;
     private float desiredWeight;

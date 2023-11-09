@@ -1,17 +1,20 @@
 package by.bsuir.caloriestracker.service;
 
+import by.bsuir.caloriestracker.models.Kbju;
 import by.bsuir.caloriestracker.models.PersonalData;
 import by.bsuir.caloriestracker.models.WeightHistory;
 import by.bsuir.caloriestracker.models.enums.ActivityType;
 import by.bsuir.caloriestracker.models.enums.Gender;
 import by.bsuir.caloriestracker.models.enums.GoalType;
 import by.bsuir.caloriestracker.repository.PersonalDataRepository;
+import by.bsuir.caloriestracker.request.PersonalDataEditingRequest;
 import by.bsuir.caloriestracker.request.PersonalDataRequest;
 import by.bsuir.caloriestracker.response.EnumResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,25 +55,43 @@ public class PersonalDataService {
         return new EnumResponse(descriptions);
     }
 
-    public PersonalData addPersonalData(long userId, PersonalDataRequest personalDataRequest) {
+
+
+    public PersonalData addPersonalData(PersonalDataRequest personalDataRequest) {
         List<WeightHistory> weightHistoryList = new ArrayList<>();
-        WeightHistory weightHistory = buildWeightHistory(personalDataRequest);
+        WeightHistory weightHistory = buildWeightHistory(personalDataRequest.getWeight());
         weightHistoryList.add(weightHistory);
         PersonalData personalData = buildPersonalData(personalDataRequest, weightHistoryList);
-        weightHistory.toBuilder().personalData(personalData).build();
-        weightHistoryService.addWeightInHistory(weightHistory);
-        userService.addPersonalData(userId, personalData);
+        WeightHistory finalWeightHistory = weightHistory.toBuilder().personalData(personalData).build();
+        weightHistoryService.addWeightInHistory(finalWeightHistory);
+        userService.addPersonalData(personalData);
         return personalDataRepository.save(personalData);
     }
 
-    private WeightHistory buildWeightHistory(PersonalDataRequest request){
+    public PersonalData editPersonalData(PersonalDataEditingRequest request) {
+        PersonalData personalData = userService.getCurrentUser().getPersonalData();
+        PersonalData editedPersonalData = buildEditedPersonalData(personalData, request);
+        Kbju newKbjuNorm = caloriesCalculationService.calculateNorm(editedPersonalData);
+        editedPersonalData.setNorm(newKbjuNorm);
+        return personalDataRepository.save(editedPersonalData);
+    }
+
+    public PersonalData editCurrentWeight(float currentWeight) {
+        PersonalData personalData = userService.getCurrentUser().getPersonalData();
+        WeightHistory weightHistory = buildWeightHistory(currentWeight);
+        WeightHistory finalWeightHistory = weightHistory.toBuilder().personalData(personalData).build();
+        weightHistoryService.addWeightInHistory(finalWeightHistory);
+        return personalData;
+    }
+
+    private WeightHistory buildWeightHistory(float weight){
         return WeightHistory.builder()
                 .weightInDate(LocalDate.now())
-                .weight(request.getWeight())
+                .weight(weight)
                 .build();
     }
 
-    private PersonalData buildPersonalData (PersonalDataRequest request, List<WeightHistory> weightHistoryList){
+    private PersonalData buildPersonalData(PersonalDataRequest request, List<WeightHistory> weightHistoryList){
         PersonalData personalData = PersonalData.builder()
                 .name(request.getName())
                 .gender(Gender.getGender(request.getGender()))
@@ -79,10 +100,21 @@ public class PersonalDataService {
                 .height(request.getHeight())
                 .weightHistory(weightHistoryList)
                 .desiredWeight(request.getDesiredWeight())
-                .age(request.getAge())
+                .dateOfBirth(LocalDate.parse(request.getDateOfBirth(), DateTimeFormatter.ofPattern("dd-MM-yyyy")))
                 .build();
         personalData.toBuilder().norm(caloriesCalculationService.calculateNorm(personalData));
         return personalData;
     }
+
+    private PersonalData buildEditedPersonalData(PersonalData personalData, PersonalDataEditingRequest request) {
+        return personalData.toBuilder()
+                .activityType(ActivityType.getActivityType(request.getActivityType()))
+                .goalType(GoalType.getGoalType(request.getGoalType()))
+                .desiredWeight(request.getDesiredWeight())
+                .height(request.getHeight())
+                .build();
+    }
+
+
 
 }

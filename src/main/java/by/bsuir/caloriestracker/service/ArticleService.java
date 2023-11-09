@@ -43,7 +43,7 @@ public class ArticleService {
                 .editor(editorService.findById(request.getEditorId()))
                 .build();
     }
-    public ArticleResponse findArticlesByEditor(long editorId){
-        return new ArticleResponse(articleRepository.findAllByEditor(editorService.findById(editorId)));
+    public ArticleResponse findArticlesByEditor(){
+        return new ArticleResponse(articleRepository.findAllByEditor(editorService.getCurrentEditor()));
     }
 }

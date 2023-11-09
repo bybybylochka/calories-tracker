@@ -21,8 +21,8 @@ public class RecipeController {
     public RecipeResponse getAllRecipes(RecipeRequest request){
         return recipeService.findAll();
     }
-    @GetMapping("/get/author/{editorId}")
-    public RecipeResponse getRecipesByEditor(@PathVariable long editorId){
-        return recipeService.findRecipesByEditor(editorId);
+    @GetMapping("/get/author")
+    public RecipeResponse getRecipesByEditor(){
+        return recipeService.findRecipesByEditor();
     }
 }

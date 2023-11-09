@@ -49,13 +49,13 @@ public class ConsumedProductService {
                 .build();
     }
 
-    public List<ConsumedProduct> findConsumedProductsByUser(long userId) {
-        User user = userService.findById(userId);
+    public List<ConsumedProduct> findConsumedProductsByUser() {
+        User user = userService.getCurrentUser();
         return consumedProductRepository.findAllByUser(user);
     }
 
-    public ConsumedProductResponse findConsumedProductByDate(long userId, LocalDate date) {
-        List<ConsumedProduct> consumedProductList = findConsumedProductsByUser(userId);
+    public ConsumedProductResponse findConsumedProductByDate(LocalDate date) {
+        List<ConsumedProduct> consumedProductList = findConsumedProductsByUser();
         List<ConsumedProduct> consumedProductsByDate = consumedProductList.stream().filter(consumedProduct ->
                 consumedProduct.getConsumptionTime().getDayOfYear() == date.getDayOfYear()
         ).toList();
@@ -88,13 +88,13 @@ public class ConsumedProductService {
 //        return new ConsumedProductResponse(consumedProductDtoList);
 //    }
 
-    public ConsumedProductHistoryResponse findConsumedProductHistory(long userId) {
+    public ConsumedProductHistoryResponse findConsumedProductHistory() {
         final int daysQuantity = 14;
         LocalDate startDate = LocalDate.now().minusDays(daysQuantity);
         Map<LocalDate, ConsumedProductResponse> consumptionHistory = new HashMap<>();
         for (int i = 0; i<daysQuantity; i++) {
             LocalDate currentDate = startDate.plusDays(i);
-            consumptionHistory.put(currentDate, findConsumedProductByDate(userId, currentDate));
+            consumptionHistory.put(currentDate, findConsumedProductByDate(currentDate));
         }
         return new ConsumedProductHistoryResponse(consumptionHistory);
     }

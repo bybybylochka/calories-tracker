@@ -1,13 +1,13 @@
 package by.bsuir.caloriestracker.service;
 
-import by.bsuir.caloriestracker.models.Article;
-import by.bsuir.caloriestracker.models.AuthorizationData;
-import by.bsuir.caloriestracker.models.Editor;
-import by.bsuir.caloriestracker.models.Recipe;
+import by.bsuir.caloriestracker.models.*;
 import by.bsuir.caloriestracker.repository.EditorRepository;
 import by.bsuir.caloriestracker.request.EditorRequest;
 import by.bsuir.caloriestracker.response.EditorResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,6 +25,11 @@ public class EditorService {
     }
     public EditorResponse findAll(){
         return new EditorResponse(editorRepository.findAll());
+    }
+
+    public Editor findByUsername(String username) {
+        return editorRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Editor with such username not found"));
     }
 
     public Editor addEditor(EditorRequest request){
@@ -56,5 +61,10 @@ public class EditorService {
                 .recipes(new ArrayList<>())
                 .articles(new ArrayList<>())
                 .build();
+    }
+    public Editor getCurrentEditor() {
+        Authentication currentAuthentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = ((UserDetails) currentAuthentication.getPrincipal()).getUsername();
+        return findByUsername(username);
     }
 }

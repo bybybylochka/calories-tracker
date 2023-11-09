@@ -66,8 +66,8 @@ public class RecipeService {
                 .editor(editorService.findById(request.getEditorId()))
                 .build();
     }
-    public RecipeResponse findRecipesByEditor(long editorId){
-        return new RecipeResponse(recipeRepository.findAllByEditor(editorService.findById(editorId)));
+    public RecipeResponse findRecipesByEditor(){
+        return new RecipeResponse(recipeRepository.findAllByEditor(editorService.getCurrentEditor()));
     }
 
 }

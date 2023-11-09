@@ -1,6 +1,7 @@
 package by.bsuir.caloriestracker.repository;
 
 import by.bsuir.caloriestracker.models.PersonalData;
+import by.bsuir.caloriestracker.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
