@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -28,4 +29,7 @@ public class Recipe {
     private String instruction;
     @ManyToOne
     private Editor editor;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_favourite_recipes")
+    private List<User> likedUserList;
 }

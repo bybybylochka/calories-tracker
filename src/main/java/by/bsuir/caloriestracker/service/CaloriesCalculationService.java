@@ -4,9 +4,7 @@ import by.bsuir.caloriestracker.models.Kbju;
 import by.bsuir.caloriestracker.models.PersonalData;
 import by.bsuir.caloriestracker.models.WeightHistory;
 import by.bsuir.caloriestracker.models.builder.KbjuBuilder;
-import by.bsuir.caloriestracker.models.enums.ActivityType;
 import by.bsuir.caloriestracker.models.enums.Gender;
-import by.bsuir.caloriestracker.models.enums.GoalType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -23,9 +23,9 @@ public class Editor implements UserDetails {
     private String fullName;
     @OneToOne
     private AuthorizationData authorizationData;
-    @OneToMany(mappedBy = "editor")
+    @OneToMany(mappedBy = "editor", fetch = FetchType.EAGER)
     private List<Recipe> recipes;
-    @OneToMany(mappedBy = "editor")
+    @OneToMany(mappedBy = "editor", fetch = FetchType.EAGER)
     private List<Article> articles;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -3,6 +3,8 @@ package by.bsuir.caloriestracker.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,4 +17,5 @@ public class AuthorizationData {
     private long id;
     private String login;
     private String password;
+    private LocalDate createdAt = LocalDate.now();
 }

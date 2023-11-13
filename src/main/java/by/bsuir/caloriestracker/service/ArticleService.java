@@ -1,18 +1,12 @@
 package by.bsuir.caloriestracker.service;
 
-import by.bsuir.caloriestracker.models.Admin;
 import by.bsuir.caloriestracker.models.Article;
-import by.bsuir.caloriestracker.repository.AdminRepository;
 import by.bsuir.caloriestracker.repository.ArticleRepository;
-import by.bsuir.caloriestracker.repository.EditorRepository;
 import by.bsuir.caloriestracker.request.ArticleRequest;
-import by.bsuir.caloriestracker.response.AdminResponse;
 import by.bsuir.caloriestracker.response.ArticleResponse;
-import by.bsuir.caloriestracker.response.RecipeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component

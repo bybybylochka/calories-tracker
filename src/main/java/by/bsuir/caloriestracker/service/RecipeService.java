@@ -6,7 +6,6 @@ import by.bsuir.caloriestracker.models.Recipe;
 import by.bsuir.caloriestracker.repository.RecipeRepository;
 import by.bsuir.caloriestracker.request.RecipeRequest;
 import by.bsuir.caloriestracker.response.RecipeResponse;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +19,11 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final EditorService editorService;
     private final ProductService productService;
+
+    public void save(Recipe recipe) {
+        recipeRepository.save(recipe);
+    }
+
 
     public Recipe findById(long id){
         return recipeRepository.findById(id)

@@ -46,14 +46,16 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/register/**")
                         .permitAll()
+                        .requestMatchers("/product-details/**")
+                        .permitAll()
                         .anyRequest()
                         .authenticated()
                 )
                 .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authenticationProvider(authenticationProvider())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(authenticationProvider())
                 .build();
     }
 }

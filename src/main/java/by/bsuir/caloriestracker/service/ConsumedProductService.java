@@ -98,4 +98,14 @@ public class ConsumedProductService {
         }
         return new ConsumedProductHistoryResponse(consumptionHistory);
     }
+
+    public  ConsumedProduct deleteConsumedProduct(long consumedProductId) {
+        ConsumedProduct consumedProduct = findById(consumedProductId);
+        consumedProductRepository.delete(consumedProduct);
+        return consumedProduct;
+    }
+
+    public ConsumedProduct updateConsumedProduct(long consumedProductId, int newWeight) {
+        return consumedProductRepository.updateWeight(consumedProductId, newWeight);
+    }
 }

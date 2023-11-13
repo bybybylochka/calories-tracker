@@ -26,7 +26,7 @@ public class User implements UserDetails {
     private PersonalData personalData;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<ConsumedProduct> consumptionHistory;
-    @ManyToMany
+    @ManyToMany(mappedBy = "likedUserList", fetch = FetchType.EAGER)
     private List<Recipe> favouriteRecipes;
     private boolean enabled = true;
 

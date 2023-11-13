@@ -5,7 +5,6 @@ import by.bsuir.caloriestracker.request.ConsumedProductRequest;
 import by.bsuir.caloriestracker.response.ConsumedProductHistoryResponse;
 import by.bsuir.caloriestracker.response.ConsumedProductResponse;
 import by.bsuir.caloriestracker.service.ConsumedProductService;
-import by.bsuir.caloriestracker.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,5 +32,14 @@ public class ConsumedProductController {
     @GetMapping("/user")
     public ConsumedProductHistoryResponse getHistory(){
         return consumedProductService.findConsumedProductHistory();
+    }
+
+    @DeleteMapping("/{consumedProductId}")
+    public ConsumedProduct deleteConsumedProduct(@PathVariable long consumedProductId){
+        return consumedProductService.deleteConsumedProduct(consumedProductId);
+    }
+    @PutMapping("/{consumedProductId}")
+    public ConsumedProduct updateConsumedProductWeight(@PathVariable long consumedProductId, @RequestParam int weight) {
+        return consumedProductService.updateConsumedProduct(consumedProductId, weight);
     }
 }

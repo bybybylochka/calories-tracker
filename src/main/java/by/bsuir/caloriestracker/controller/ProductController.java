@@ -5,10 +5,7 @@ import by.bsuir.caloriestracker.request.ProductRequest;
 import by.bsuir.caloriestracker.response.ProductResponse;
 import by.bsuir.caloriestracker.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +14,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/add")
-    public Product addProduct(ProductRequest request){
+    public Product addProduct(@RequestBody ProductRequest request){
         return productService.addProduct(request);
     }
 
