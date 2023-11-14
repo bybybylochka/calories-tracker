@@ -22,6 +22,4 @@ public class EditorController {
     public EditorResponse getAllEditors(){
         return editorService.findAll();
     }
-
-
 }
