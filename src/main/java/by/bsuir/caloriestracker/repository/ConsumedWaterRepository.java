@@ -1,6 +1,6 @@
 package by.bsuir.caloriestracker.repository;
 
-import by.bsuir.caloriestracker.models.ConsumedProduct;
+import by.bsuir.caloriestracker.models.ConsumedWater;
 import by.bsuir.caloriestracker.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ConsumedProductRepository extends JpaRepository<ConsumedProduct, Long> {
-    List<ConsumedProduct> findAllByUser(User user);
-    @Modifying
-    @Query("update ConsumedProduct c set c.weight = :weight where c.id = :id")
-    int updateWeight(@Param("id") long id, @Param("weight") int weight);
+public interface ConsumedWaterRepository extends JpaRepository<ConsumedWater, Long> {
+    List<ConsumedWater> findAllByUser(User user);
 
+    @Modifying
+    @Query("update ConsumedWater cw set cw.volume = :volume where cw.id = :id")
+    int updateConsumedWater(@Param("id") long id, @Param("volume") int volume);
 }

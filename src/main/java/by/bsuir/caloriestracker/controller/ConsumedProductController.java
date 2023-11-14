@@ -39,7 +39,7 @@ public class ConsumedProductController {
         return consumedProductService.deleteConsumedProduct(consumedProductId);
     }
     @PutMapping("/{consumedProductId}")
-    public ConsumedProduct updateConsumedProductWeight(@PathVariable long consumedProductId, @RequestParam int weight) {
-        return consumedProductService.updateConsumedProduct(consumedProductId, weight);
+    public void updateConsumedProductWeight(@PathVariable long consumedProductId, @RequestParam int weight) {
+        consumedProductService.updateConsumedProduct(consumedProductId, weight);
     }
 }

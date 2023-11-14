@@ -82,12 +82,6 @@ public class ConsumedProductService {
                 .build();
     }
 
-//    public ConsumedProductResponse findConsumedProductBy(long userId, LocalDate date) {
-//        List<ConsumedProduct> consumedProductByDate = findConsumedProductByDate(userId, LocalDate.now());
-//        List<ConsumedProductDto> consumedProductDtoList = consumedProductByDate.stream().map(this::toDto).toList();
-//        return new ConsumedProductResponse(consumedProductDtoList);
-//    }
-
     public ConsumedProductHistoryResponse findConsumedProductHistory() {
         final int daysQuantity = 14;
         LocalDate startDate = LocalDate.now().minusDays(daysQuantity);
@@ -99,13 +93,13 @@ public class ConsumedProductService {
         return new ConsumedProductHistoryResponse(consumptionHistory);
     }
 
-    public  ConsumedProduct deleteConsumedProduct(long consumedProductId) {
+    public ConsumedProduct deleteConsumedProduct(long consumedProductId) {
         ConsumedProduct consumedProduct = findById(consumedProductId);
         consumedProductRepository.delete(consumedProduct);
         return consumedProduct;
     }
 
-    public ConsumedProduct updateConsumedProduct(long consumedProductId, int newWeight) {
-        return consumedProductRepository.updateWeight(consumedProductId, newWeight);
+    public void updateConsumedProduct(long consumedProductId, int newWeight) {
+        consumedProductRepository.updateWeight(consumedProductId, newWeight);
     }
 }
