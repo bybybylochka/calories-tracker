@@ -6,6 +6,7 @@ import by.bsuir.caloriestracker.request.ArticleRequest;
 import by.bsuir.caloriestracker.response.ArticleResponse;
 import by.bsuir.caloriestracker.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/article")
 public class ArticleController {
     private final ArticleService articleService;
-
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_EDITOR')")
     public Article addArticle(@RequestBody ArticleRequest request){
         return articleService.addArticle(request);
     }
 
-    @GetMapping("")
+    @GetMapping()
     public ArticleResponse getAllArticles(){
         return articleService.findAll();
     }

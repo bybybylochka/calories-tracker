@@ -4,12 +4,14 @@ import by.bsuir.caloriestracker.models.AuthorizationData;
 import by.bsuir.caloriestracker.repository.AuthorizationDataRepository;
 import by.bsuir.caloriestracker.request.UserAuthenticationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class AuthorizationDataService {
     private final AuthorizationDataRepository authorizationDataRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthorizationData addAuthorizationData(UserAuthenticationRequest request){
         AuthorizationData authorizationData = buildAuthorizationData(request);
@@ -19,7 +21,7 @@ public class AuthorizationDataService {
     private AuthorizationData buildAuthorizationData(UserAuthenticationRequest request){
         return AuthorizationData.builder()
                 .login(request.getUsername())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .build();
     }
 }

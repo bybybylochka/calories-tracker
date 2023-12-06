@@ -1,7 +1,9 @@
 package by.bsuir.caloriestracker.service;
 
-import by.bsuir.caloriestracker.models.Kbju;
+import by.bsuir.caloriestracker.dto.PersonalDataDto;
+import by.bsuir.caloriestracker.models.Norm;
 import by.bsuir.caloriestracker.models.PersonalData;
+import by.bsuir.caloriestracker.models.User;
 import by.bsuir.caloriestracker.models.WeightHistory;
 import by.bsuir.caloriestracker.models.enums.ActivityType;
 import by.bsuir.caloriestracker.models.enums.Gender;
@@ -17,6 +19,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -29,6 +33,12 @@ public class PersonalDataService {
     public PersonalData findById(long id) {
         return personalDataRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Personal data with this id not found"));
+    }
+
+    public PersonalDataDto getPersonalData() {
+        User user = userService.getCurrentUser();
+        PersonalDataDto personalDataDto = toDto(userService.findPersonalData(user));
+        return personalDataDto;
     }
 
     public EnumResponse getActivityTypes() {
@@ -62,17 +72,18 @@ public class PersonalDataService {
         WeightHistory weightHistory = buildWeightHistory(personalDataRequest.getWeight());
         weightHistoryList.add(weightHistory);
         PersonalData personalData = buildPersonalData(personalDataRequest, weightHistoryList);
-        WeightHistory finalWeightHistory = weightHistory.toBuilder().personalData(personalData).build();
+        PersonalData savedPersonalData = personalDataRepository.save(personalData);
+        WeightHistory finalWeightHistory = weightHistory.toBuilder().personalData(savedPersonalData).build();
         weightHistoryService.addWeightInHistory(finalWeightHistory);
-        userService.addPersonalData(personalData);
-        return personalDataRepository.save(personalData);
+        userService.addPersonalData(savedPersonalData);
+        return savedPersonalData;
     }
 
     public PersonalData editPersonalData(PersonalDataEditingRequest request) {
         PersonalData personalData = userService.getCurrentUser().getPersonalData();
         PersonalData editedPersonalData = buildEditedPersonalData(personalData, request);
-        Kbju newKbjuNorm = caloriesCalculationService.calculateNorm(editedPersonalData);
-        editedPersonalData.setNorm(newKbjuNorm);
+        Norm norm = caloriesCalculationService.calculateNorm(editedPersonalData);
+        editedPersonalData.setNorm(norm);
         return personalDataRepository.save(editedPersonalData);
     }
 
@@ -102,7 +113,7 @@ public class PersonalDataService {
                 .desiredWeight(request.getDesiredWeight())
                 .dateOfBirth(LocalDate.parse(request.getDateOfBirth(), DateTimeFormatter.ofPattern("dd-MM-yyyy")))
                 .build();
-        personalData.toBuilder().norm(caloriesCalculationService.calculateNorm(personalData));
+        personalData = personalData.toBuilder().norm(caloriesCalculationService.calculateNorm(personalData)).build();
         return personalData;
     }
 
@@ -114,6 +125,27 @@ public class PersonalDataService {
                 .height(request.getHeight())
                 .build();
     }
+
+    private PersonalDataDto toDto(PersonalData personalData) {
+        return PersonalDataDto.builder()
+                .id(personalData.getId())
+                .name(personalData.getName())
+                .activityType(personalData.getActivityType().getDescription())
+                .gender(personalData.getGender().getDescription())
+                .goalType(personalData.getGoalType().getDescription())
+                .height(personalData.getHeight())
+                .dateOfBirth(personalData.getDateOfBirth())
+                .desiredWeight(personalData.getDesiredWeight())
+                .norm(personalData.getNorm())
+                .weightHistory(mapWeightHistory(personalData.getWeightHistory()))
+                .build();
+    }
+
+    private Map<LocalDate, Float> mapWeightHistory(List<WeightHistory> weightHistoryList) {
+        return weightHistoryList.stream()
+                .collect(Collectors.toMap(WeightHistory::getWeightInDate, WeightHistory::getWeight));
+    }
+
 
 
 

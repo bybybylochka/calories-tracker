@@ -1,9 +1,10 @@
 package by.bsuir.caloriestracker.models.builder;
 
 import by.bsuir.caloriestracker.models.Kbju;
+import by.bsuir.caloriestracker.models.Norm;
 import by.bsuir.caloriestracker.models.enums.GoalType;
 
-public class KbjuBuilder {
+public class NormBuilder {
     private GoalType goalType;
     private double basalMetabolism;
     private int caloriesNorm;
@@ -11,37 +12,44 @@ public class KbjuBuilder {
     private int proteinsNorm;
     private int fatsNorm;
 
-    public KbjuBuilder forGoalType(GoalType goalType) {
+    public NormBuilder forGoalType(GoalType goalType) {
         this.goalType = goalType;
         return this;
     }
 
-    public KbjuBuilder withBasalMetabolism(double basalMetabolism) {
+    public NormBuilder withBasalMetabolism(double basalMetabolism) {
         this.basalMetabolism = basalMetabolism;
         return this;
     }
 
-    public KbjuBuilder calculateCaloriesNorm() {
+    public NormBuilder calculateCaloriesNorm() {
         this.caloriesNorm = (int) (this.basalMetabolism * goalType.getMetabolismCoefficient());
         return this;
     }
 
-    public KbjuBuilder andProteins() {
+    public NormBuilder andProteins() {
         this.proteinsNorm = (int) (this.caloriesNorm * goalType.getProteinsCoefficient() / 4);
         return this;
     }
 
-    public KbjuBuilder andFats() {
+    public NormBuilder andFats() {
         this.fatsNorm = (int) (this.caloriesNorm * goalType.getFatsCoefficient() / 4.1);
         return this;
     }
 
-    public KbjuBuilder andCarbs() {
+    public NormBuilder andCarbs() {
         this.carbsNorm = (int) (this.caloriesNorm * goalType.getCarbsCoefficient() / 9);
         return this;
     }
 
-    public Kbju buildKbju() {
-        return new Kbju(this.proteinsNorm, this.proteinsNorm, this.carbsNorm, this.fatsNorm);
+    public Norm buildNorm() {
+        Kbju kbju = new Kbju(this.caloriesNorm, this.proteinsNorm, this.carbsNorm, this.fatsNorm);
+        return Norm.builder()
+                .kbju(kbju)
+                .breakfastNorm((int) (0.3 * caloriesNorm))
+                .lunchNorm((int) (0.4 * caloriesNorm))
+                .dinnerNorm((int) (0.2 * caloriesNorm))
+                .snackNorm((int) (0.1 * caloriesNorm))
+                .build();
     }
 }

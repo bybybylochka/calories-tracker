@@ -1,9 +1,10 @@
 package by.bsuir.caloriestracker.service;
 
 import by.bsuir.caloriestracker.models.Kbju;
+import by.bsuir.caloriestracker.models.Norm;
 import by.bsuir.caloriestracker.models.PersonalData;
 import by.bsuir.caloriestracker.models.WeightHistory;
-import by.bsuir.caloriestracker.models.builder.KbjuBuilder;
+import by.bsuir.caloriestracker.models.builder.NormBuilder;
 import by.bsuir.caloriestracker.models.enums.Gender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,15 +17,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CaloriesCalculationService {
 
-    public Kbju calculateNorm(PersonalData personalData) {
+    public Norm calculateNorm(PersonalData personalData) {
         double basalMetabolismWithoutActivity = calculateBasalMetabolism(personalData);
         double activityCoefficient = personalData.getActivityType().getActivityCoefficient();
-        return new KbjuBuilder()
+        return new NormBuilder()
                 .forGoalType(personalData.getGoalType())
                 .withBasalMetabolism(basalMetabolismWithoutActivity * activityCoefficient)
                 .calculateCaloriesNorm()
                 .andCarbs().andFats().andProteins()
-                .buildKbju();
+                .buildNorm();
     }
 
     private double calculateBasalMetabolism(PersonalData personalData) {

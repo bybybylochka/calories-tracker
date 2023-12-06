@@ -5,6 +5,7 @@ import by.bsuir.caloriestracker.request.RecipeRequest;
 import by.bsuir.caloriestracker.response.RecipeResponse;
 import by.bsuir.caloriestracker.service.RecipeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,7 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_EDITOR')")
     public Recipe addRecipe(RecipeRequest request){
         return recipeService.addRecipe(request);
     }

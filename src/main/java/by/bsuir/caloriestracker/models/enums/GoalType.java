@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum GoalType {
-    LOSING_WEIGHT(" losing weight", 0.85, 0.35, 0.35, 0.25),
-    MAINTAINING_WEIGHT(" maintaining weight", 1, 0.3, 0.4, 0.3),
-    MASS_GAIN(" mass gain", 1.15, 0.4, 0.45, 0.15);
+    LOSING_WEIGHT("losing weight", 0.85, 0.35, 0.35, 0.25),
+    MAINTAINING_WEIGHT("maintaining weight", 1, 0.3, 0.4, 0.3),
+    MASS_GAIN("mass gain", 1.15, 0.4, 0.45, 0.15);
 
     private final String description;
     private final double metabolismCoefficient;

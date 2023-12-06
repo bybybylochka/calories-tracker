@@ -15,6 +15,7 @@ public class EditorController {
 
     @PostMapping("/add")
     public Editor addEditor(@RequestBody EditorRequest request){
+
         return editorService.addEditor(request);
     }
 

@@ -31,5 +31,4 @@ public class StatisticsService {
     public RecipeStatisticsResponse getRecipeStatistics() {
         return recipeService.getRecipeStatistics();
     }
-
 }

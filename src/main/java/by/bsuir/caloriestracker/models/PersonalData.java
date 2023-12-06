@@ -31,6 +31,6 @@ public class PersonalData {
     private float height;
     private LocalDate dateOfBirth;
     @Embedded
-    private Kbju norm;
+    private Norm norm;
     private float desiredWeight;
 }
