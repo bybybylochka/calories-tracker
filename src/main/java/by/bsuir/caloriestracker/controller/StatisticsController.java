@@ -20,11 +20,13 @@ public class StatisticsController {
 
     @GetMapping("/user/count")
     public long getTotalUserCount() {
+
         return statisticsService.getTotalUsersCount();
     }
 
     @GetMapping("/user/count/today")
     public long getTodayRegisteredUserCount() {
+
         return statisticsService.getTodayUsersCount();
     }
 

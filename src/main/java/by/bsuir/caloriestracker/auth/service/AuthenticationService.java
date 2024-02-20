@@ -6,6 +6,8 @@ import by.bsuir.caloriestracker.response.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +26,13 @@ public class AuthenticationService {
         authenticationManager.authenticate(authenticationToken);
         UserDetails user = appUserService.loadUserByUsername(authenticationRequest.getUsername());
         String token = jwtUtils.generateToken(user);
-        return new AuthenticationResponse(token);
+        GrantedAuthority grantedAuthority = user.getAuthorities().stream().findFirst().orElseThrow();
+        String role = grantedAuthority.getAuthority();
+        return new AuthenticationResponse(token, role);
     };
+
+    public void logout() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+    }
 
 }

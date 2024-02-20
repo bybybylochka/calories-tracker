@@ -14,5 +14,4 @@ public class RecipeRequest {
     private int servingCount;
     private Map<Long, Integer> ingredients;
     private String instruction;
-    private long editorId;
 }

@@ -79,12 +79,13 @@ public class PersonalDataService {
         return savedPersonalData;
     }
 
-    public PersonalData editPersonalData(PersonalDataEditingRequest request) {
+    public PersonalDataDto editPersonalData(PersonalDataEditingRequest request) {
         PersonalData personalData = userService.getCurrentUser().getPersonalData();
         PersonalData editedPersonalData = buildEditedPersonalData(personalData, request);
         Norm norm = caloriesCalculationService.calculateNorm(editedPersonalData);
         editedPersonalData.setNorm(norm);
-        return personalDataRepository.save(editedPersonalData);
+        PersonalData savedPersonalData = personalDataRepository.save(editedPersonalData);
+        return toDto(savedPersonalData);
     }
 
     public PersonalData editCurrentWeight(float currentWeight) {
@@ -111,7 +112,7 @@ public class PersonalDataService {
                 .height(request.getHeight())
                 .weightHistory(weightHistoryList)
                 .desiredWeight(request.getDesiredWeight())
-                .dateOfBirth(LocalDate.parse(request.getDateOfBirth(), DateTimeFormatter.ofPattern("dd-MM-yyyy")))
+                .dateOfBirth(LocalDate.parse(request.getDateOfBirth(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .build();
         personalData = personalData.toBuilder().norm(caloriesCalculationService.calculateNorm(personalData)).build();
         return personalData;
@@ -119,9 +120,10 @@ public class PersonalDataService {
 
     private PersonalData buildEditedPersonalData(PersonalData personalData, PersonalDataEditingRequest request) {
         return personalData.toBuilder()
+                .name(request.getName())
                 .activityType(ActivityType.getActivityType(request.getActivityType()))
                 .goalType(GoalType.getGoalType(request.getGoalType()))
-                .desiredWeight(request.getDesiredWeight())
+//                .desiredWeight(request.getDesiredWeight())
                 .height(request.getHeight())
                 .build();
     }

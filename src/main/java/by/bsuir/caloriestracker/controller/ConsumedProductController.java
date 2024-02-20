@@ -1,5 +1,6 @@
 package by.bsuir.caloriestracker.controller;
 
+import by.bsuir.caloriestracker.dto.ConsumedProductDto;
 import by.bsuir.caloriestracker.models.ConsumedProduct;
 import by.bsuir.caloriestracker.request.ConsumedProductRequest;
 import by.bsuir.caloriestracker.response.ConsumedProductHistoryResponse;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 public class ConsumedProductController {
     private final ConsumedProductService consumedProductService;
     @PostMapping("/add")
-    public ConsumedProduct addConsumedProduct(@RequestBody ConsumedProductRequest request){
+    public ConsumedProductDto addConsumedProduct(@RequestBody ConsumedProductRequest request){
         return consumedProductService.addConsumedProduct(request);
     }
 
@@ -35,7 +36,7 @@ public class ConsumedProductController {
     }
 
     @DeleteMapping("/{consumedProductId}")
-    public ConsumedProduct deleteConsumedProduct(@PathVariable long consumedProductId){
+    public ConsumedProductDto deleteConsumedProduct(@PathVariable long consumedProductId){
         return consumedProductService.deleteConsumedProduct(consumedProductId);
     }
     @PutMapping("/{consumedProductId}")

@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class ConsumedProductRequest {
-    private long userId;
     private long productId;
+    private String mealType;
     private int weight;
 }

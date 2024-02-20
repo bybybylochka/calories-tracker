@@ -1,6 +1,7 @@
 package by.bsuir.caloriestracker.controller;
 
 
+import by.bsuir.caloriestracker.dto.ArticleDto;
 import by.bsuir.caloriestracker.models.Article;
 import by.bsuir.caloriestracker.request.ArticleRequest;
 import by.bsuir.caloriestracker.response.ArticleResponse;
@@ -16,7 +17,7 @@ public class ArticleController {
     private final ArticleService articleService;
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_EDITOR')")
-    public Article addArticle(@RequestBody ArticleRequest request){
+    public ArticleDto addArticle(@RequestBody ArticleRequest request){
         return articleService.addArticle(request);
     }
 

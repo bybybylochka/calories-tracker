@@ -1,12 +1,13 @@
 package by.bsuir.caloriestracker.controller;
 
+import by.bsuir.caloriestracker.dto.RecipeDto;
+import by.bsuir.caloriestracker.models.Recipe;
 import by.bsuir.caloriestracker.models.User;
 import by.bsuir.caloriestracker.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,7 +16,12 @@ public class UserController {
     private final UserService userService;
 
     @PutMapping("/add-favourite-recipe/{recipeId}")
-    public User addRecipeIntoFavourites(@PathVariable long recipeId){
+    public RecipeDto addRecipeIntoFavourites(@PathVariable long recipeId){
         return userService.addRecipeIntoFavourites(recipeId);
+    }
+
+    @GetMapping("/favourite-recipes")
+    public List<RecipeDto> getFavouriteRecipes(){
+        return userService.getFavouriteRecipes();
     }
 }

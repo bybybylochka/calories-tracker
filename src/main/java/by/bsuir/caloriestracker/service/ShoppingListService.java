@@ -17,7 +17,7 @@ public class ShoppingListService {
     private final RecipeService recipeService;
     public ShoppingListResponse createShoppingList(ShoppingListRequest request){
         List<Long> recipes = request.getRecipes();
-        List<Recipe> listRecipe = recipes.stream().map(recipe -> recipeService.findById(recipe)).toList();
+        List<Recipe> listRecipe = recipes.stream().map(recipeService::findById).toList();
         Map<String, Integer> ingredients = new HashMap<>();
         listRecipe.forEach(recipe -> addIngredientsFromRecipe(recipe, ingredients));
         return new ShoppingListResponse(ingredients);

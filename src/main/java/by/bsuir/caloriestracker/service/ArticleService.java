@@ -1,5 +1,6 @@
 package by.bsuir.caloriestracker.service;
 
+import by.bsuir.caloriestracker.dto.ArticleDto;
 import by.bsuir.caloriestracker.models.Article;
 import by.bsuir.caloriestracker.repository.ArticleRepository;
 import by.bsuir.caloriestracker.request.ArticleRequest;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -20,13 +23,19 @@ public class ArticleService {
                 ()-> new IllegalArgumentException("Article with this id not found"));
     }
     public ArticleResponse findAll(){
-        return new ArticleResponse(articleRepository.findAll());
+        List<Article> articleList = articleRepository.findAll();
+        return new ArticleResponse(articleList.stream().map(this::toDto).toList());
     }
 
-    public Article addArticle(ArticleRequest request){
+    public ArticleDto addArticle(ArticleRequest request){
         Article article = buildArticle(request);
-        editorService.addArticle(request.getEditorId(), article);
-        return articleRepository.save(article);
+        editorService.addArticle(editorService.getCurrentEditor(), article);
+        return toDto(articleRepository.save(article));
+    }
+
+    public ArticleResponse findArticlesByEditor(){
+        List<Article> articleList = articleRepository.findAllByEditor(editorService.getCurrentEditor());
+        return new ArticleResponse(articleList.stream().map(this::toDto).toList());
     }
 
     private Article buildArticle(ArticleRequest request){
@@ -34,10 +43,17 @@ public class ArticleService {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .publicationTime(LocalDateTime.now())
-                .editor(editorService.findById(request.getEditorId()))
+                .editor(editorService.getCurrentEditor())
                 .build();
     }
-    public ArticleResponse findArticlesByEditor(){
-        return new ArticleResponse(articleRepository.findAllByEditor(editorService.getCurrentEditor()));
+
+    private ArticleDto toDto(Article article) {
+        return ArticleDto.builder()
+                .id(article.getId())
+                .title(article.getTitle())
+                .content(article.getContent())
+                .publicationTime(DateTimeFormatter.ofPattern("dd-MM-yyyy").format(article.getPublicationTime()))
+                .editorName(article.getEditor().getFullName())
+                .build();
     }
 }

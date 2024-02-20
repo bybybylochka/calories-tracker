@@ -23,7 +23,7 @@ public class PersonalDataController {
         return personalDataService.getPersonalData();
     }
     @PutMapping("/update-personal-data")
-    public PersonalData editPersonalData(@RequestBody PersonalDataEditingRequest request) {
+    public PersonalDataDto editPersonalData(@RequestBody PersonalDataEditingRequest request) {
         return personalDataService.editPersonalData(request);
     }
     @PutMapping("/update-weight/{weight}")

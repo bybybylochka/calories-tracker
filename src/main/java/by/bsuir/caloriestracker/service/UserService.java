@@ -1,5 +1,6 @@
 package by.bsuir.caloriestracker.service;
 
+import by.bsuir.caloriestracker.dto.RecipeDto;
 import by.bsuir.caloriestracker.models.PersonalData;
 import by.bsuir.caloriestracker.models.Recipe;
 import by.bsuir.caloriestracker.models.User;
@@ -76,18 +77,22 @@ public class UserService {
         userRepository.save(user);
     }
     
-    public User addRecipeIntoFavourites(long recipeId) {
+    public RecipeDto addRecipeIntoFavourites(long recipeId) {
         User currentUser = getCurrentUser();
-        Recipe recipe = recipeService.findById(recipeId);
-        currentUser.getFavouriteRecipes().add(recipe);
-        recipe.getLikedUserList().add(currentUser);
-        recipeService.save(recipe);
-        return userRepository.save(currentUser);
+        if(recipeService.findById(recipeId)!=null){
+            Recipe recipe = recipeService.findById(recipeId);
+            currentUser.getFavouriteRecipes().add(recipe);
+            recipe.getLikedUserList().add(currentUser);
+            userRepository.save(currentUser);
+            recipeService.save(recipe);
+            return recipeService.toDto(recipeService.save(recipe));
+        }
+        else throw new IllegalArgumentException("recipe with this id not found!");
     }
 
-    public List<Recipe> getFavouriteRecipes() {
+    public List<RecipeDto> getFavouriteRecipes() {
         User currentUser = getCurrentUser();
-        return currentUser.getFavouriteRecipes();
+        return currentUser.getFavouriteRecipes().stream().map(recipeService::toDto).toList();
     }
 
     public User getCurrentUser() {

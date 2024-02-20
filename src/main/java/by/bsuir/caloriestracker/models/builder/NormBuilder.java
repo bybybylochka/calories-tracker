@@ -3,6 +3,7 @@ package by.bsuir.caloriestracker.models.builder;
 import by.bsuir.caloriestracker.models.Kbju;
 import by.bsuir.caloriestracker.models.Norm;
 import by.bsuir.caloriestracker.models.enums.GoalType;
+import by.bsuir.caloriestracker.models.enums.MealType;
 
 public class NormBuilder {
     private GoalType goalType;
@@ -46,10 +47,10 @@ public class NormBuilder {
         Kbju kbju = new Kbju(this.caloriesNorm, this.proteinsNorm, this.carbsNorm, this.fatsNorm);
         return Norm.builder()
                 .kbju(kbju)
-                .breakfastNorm((int) (0.3 * caloriesNorm))
-                .lunchNorm((int) (0.4 * caloriesNorm))
-                .dinnerNorm((int) (0.2 * caloriesNorm))
-                .snackNorm((int) (0.1 * caloriesNorm))
+                .breakfastNorm((int) (MealType.BREAKFAST.getPercentageInDailyMeal() * caloriesNorm))
+                .lunchNorm((int) (MealType.LUNCH.getPercentageInDailyMeal() * caloriesNorm))
+                .dinnerNorm((int) (MealType.DINNER.getPercentageInDailyMeal() * caloriesNorm))
+                .snackNorm((int) (MealType.SNACK.getPercentageInDailyMeal() * caloriesNorm))
                 .build();
     }
 }

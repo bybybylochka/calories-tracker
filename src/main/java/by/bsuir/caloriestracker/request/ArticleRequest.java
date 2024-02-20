@@ -8,6 +8,4 @@ import java.time.LocalDateTime;
 public class ArticleRequest {
     private String title;
     private String content;
-    private LocalDateTime publicationTime;
-    private long editorId;
 }

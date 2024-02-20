@@ -9,8 +9,10 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class ConsumedProductDto {
+    private long id;
     private String productName;
     private LocalDateTime consumptionTime;
     private int weight;
     private Kbju kbju;
+    private String mealType;
 }

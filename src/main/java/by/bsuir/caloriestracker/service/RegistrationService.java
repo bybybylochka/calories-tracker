@@ -34,7 +34,7 @@ public class RegistrationService {
             authDataRepository.save(authData);
             User user = userRepository.save(User.builder().authorizationData(authData).build());
             String token = jwtUtils.generateToken(user);
-            return new AuthenticationResponse(token);
+            return new AuthenticationResponse(token, "ROLE_USER");
         }
         else throw new IllegalArgumentException("user with this username already exists!");
     }

@@ -14,6 +14,7 @@ public class RecipeDto {
     private String title;
     private int cookingTime;
     private int servingCount;
+    private int likesCount;
     private Map<String, Integer> ingredients;
     private String instruction;
     private String editorName;

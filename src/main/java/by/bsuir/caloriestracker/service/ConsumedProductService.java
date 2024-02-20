@@ -4,6 +4,7 @@ import by.bsuir.caloriestracker.dto.ConsumedProductDto;
 import by.bsuir.caloriestracker.models.ConsumedProduct;
 import by.bsuir.caloriestracker.models.Kbju;
 import by.bsuir.caloriestracker.models.User;
+import by.bsuir.caloriestracker.models.enums.MealType;
 import by.bsuir.caloriestracker.repository.ConsumedProductRepository;
 import by.bsuir.caloriestracker.request.ConsumedProductRequest;
 import by.bsuir.caloriestracker.response.ConsumedProductHistoryResponse;
@@ -35,17 +36,19 @@ public class ConsumedProductService {
         return new ConsumedProductResponse(dtoList);
     }
 
-    public ConsumedProduct addConsumedProduct(ConsumedProductRequest request) {
+    public ConsumedProductDto addConsumedProduct(ConsumedProductRequest request) {
         ConsumedProduct consumedProduct = buildConsumedProduct(request);
-        return consumedProductRepository.save(consumedProduct);
+        ConsumedProduct savedConsumedProduct = consumedProductRepository.save(consumedProduct);
+        return toDto(savedConsumedProduct);
     }
 
     private ConsumedProduct buildConsumedProduct(ConsumedProductRequest request) {
         return ConsumedProduct.builder()
-                .user(userService.findById(request.getUserId()))
+                .user(userService.getCurrentUser())
                 .product(productService.findById(request.getProductId()))
                 .weight(request.getWeight())
                 .consumptionTime(LocalDateTime.now())
+                .mealType(MealType.getMealType(request.getMealType()))
                 .build();
     }
 
@@ -65,10 +68,12 @@ public class ConsumedProductService {
 
     public ConsumedProductDto toDto(ConsumedProduct consumedProduct) {
         return ConsumedProductDto.builder()
+                .id(consumedProduct.getId())
                 .productName(consumedProduct.getProduct().getName())
                 .consumptionTime(consumedProduct.getConsumptionTime())
                 .kbju(calculateKbju(consumedProduct))
                 .weight(consumedProduct.getWeight())
+                .mealType(consumedProduct.getMealType().getDescription())
                 .build();
     }
 
@@ -93,10 +98,10 @@ public class ConsumedProductService {
         return new ConsumedProductHistoryResponse(consumptionHistory);
     }
 
-    public ConsumedProduct deleteConsumedProduct(long consumedProductId) {
+    public ConsumedProductDto deleteConsumedProduct(long consumedProductId) {
         ConsumedProduct consumedProduct = findById(consumedProductId);
         consumedProductRepository.delete(consumedProduct);
-        return consumedProduct;
+        return toDto(consumedProduct);
     }
 
     public void updateConsumedProduct(long consumedProductId, int newWeight) {

@@ -1,5 +1,6 @@
 package by.bsuir.caloriestracker.service;
 
+import by.bsuir.caloriestracker.dto.ProductDto;
 import by.bsuir.caloriestracker.dto.RecipeDto;
 import by.bsuir.caloriestracker.dto.RecipeStatisticsDto;
 import by.bsuir.caloriestracker.models.Kbju;
@@ -18,6 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @AllArgsConstructor
@@ -26,8 +28,8 @@ public class RecipeService {
     private final EditorService editorService;
     private final ProductService productService;
 
-    public void save(Recipe recipe) {
-        recipeRepository.save(recipe);
+    public Recipe save(Recipe recipe) {
+        return recipeRepository.save(recipe);
     }
 
     public Recipe findById(long id) {
@@ -40,16 +42,57 @@ public class RecipeService {
         return new RecipeResponse(dtoList);
     }
 
-    public Recipe addRecipe(RecipeRequest request){
+    public RecipeDto addRecipe(RecipeRequest request){
         Recipe recipe = buildRecipe(request);
-        editorService.addRecipe(request.getEditorId(), recipe);
-        return recipeRepository.save(recipe);
+        editorService.addRecipe(editorService.getCurrentEditor().getId(), recipe);
+        Recipe savedRecipe = recipeRepository.save(recipe);
+        return toDto(savedRecipe);
     }
 
     public RecipeResponse findRecipesByEditor() {
         List<Recipe> allByEditor = recipeRepository.findAllByEditor(editorService.getCurrentEditor());
         List<RecipeDto> dtoList = allByEditor.stream().map(this::toDto).toList();
         return new RecipeResponse(dtoList);
+    }
+
+    public RecipeResponse findListByTitle(String title, int maxCalories, boolean shouldSort){
+        List<Recipe> recipes;
+        if(title.equals("")){
+            recipes=recipeRepository.findAll();
+        }
+        else{
+            recipes=recipeRepository.findByTitleContainingIgnoreCase(title);
+        }
+        Stream<RecipeDto> filteredRecipeStream = recipes
+                .stream()
+                .map(this::toDto)
+                .filter(recipe->recipe.getKbju().getCalories()<=maxCalories);
+        List<RecipeDto> result = shouldSort
+                ? filteredRecipeStream
+                    .sorted(Comparator.comparing(RecipeDto::getLikesCount, Comparator.reverseOrder()))
+                    .toList()
+                : filteredRecipeStream.toList();
+        return new RecipeResponse(result);
+    }
+
+    public RecipeResponse sortRecipesByLikesQuantity(){
+        List<Recipe> allRecipes = recipeRepository.findAll();
+        List<RecipeDto> sortedRecipes = allRecipes.stream()
+                .sorted(Comparator.comparing(recipe->recipe.getLikedUserList().size(), Comparator.reverseOrder()))
+                .map(this::toDto)
+                .toList();
+        return new RecipeResponse(sortedRecipes);
+    }
+
+
+
+    public RecipeResponse filterRecipesByCalories(int maxCaloriesQuantity){
+        List<Recipe> allRecipes = recipeRepository.findAll();
+        List<RecipeDto> filteredRecipes = allRecipes.stream()
+                .map(this::toDto)
+                .filter(recipe->recipe.getKbju().getCalories()<=maxCaloriesQuantity)
+                .toList();
+        return new RecipeResponse(filteredRecipes);
     }
 
     public RecipeStatisticsResponse getRecipeStatistics() {
@@ -62,14 +105,20 @@ public class RecipeService {
     }
 
     public Kbju getKbju(Recipe recipe) {
-        int totalCalories = 0, totalCarbs = 0, totalProteins = 0, totalFats = 0;
+        int totalCalories = 0, totalCarbs = 0, totalProteins = 0, totalFats = 0, totalWeight=0;
         for(Map.Entry<Product, Integer> entry : recipe.getIngredients().entrySet()) {
             Product product = entry.getKey();
-            totalCalories += product.getKbju().getCalories();
-            totalCarbs += product.getKbju().getCarbohydrates();
-            totalProteins += product.getKbju().getProteins();
-            totalFats += product.getKbju().getFats();
+            totalWeight += entry.getValue();
+            totalCalories += product.getKbju().getCalories()*entry.getValue()/100;
+            totalCarbs += product.getKbju().getCarbohydrates()*entry.getValue()/100;
+            totalProteins += product.getKbju().getProteins()*entry.getValue()/100;
+            totalFats += product.getKbju().getFats()*entry.getValue()/100;
+
         }
+        totalCalories = totalCalories*100/totalWeight;
+        totalCarbs = totalCarbs*100/totalWeight;
+        totalProteins = totalProteins*100/totalWeight;
+        totalFats = totalFats*100/totalWeight;
         return new Kbju(totalCalories, totalProteins, totalCarbs, totalFats);
     }
 
@@ -81,15 +130,18 @@ public class RecipeService {
                 .publicationTime(LocalDateTime.now())
                 .servingCount(request.getServingCount())
                 .ingredients(mapIngredients(request))
-                .editor(editorService.findById(request.getEditorId()))
+                .editor(editorService.findById(editorService.getCurrentEditor().getId()))
                 .build();
     }
 
-    private RecipeDto toDto(Recipe recipe) {
+    public RecipeDto toDto(Recipe recipe) {
+
         return RecipeDto.builder()
                 .id(recipe.getId())
+                .title(recipe.getTitle())
                 .publicationTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(recipe.getPublicationTime()))
                 .cookingTime(recipe.getCookingTime())
+                .likesCount(recipe.getLikedUserList().size())
                 .editorName(recipe.getEditor().getFullName())
                 .servingCount(recipe.getServingCount())
                 .instruction(recipe.getInstruction())

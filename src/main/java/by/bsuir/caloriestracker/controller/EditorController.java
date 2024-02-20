@@ -1,5 +1,6 @@
 package by.bsuir.caloriestracker.controller;
 
+import by.bsuir.caloriestracker.dto.EditorDto;
 import by.bsuir.caloriestracker.models.Editor;
 import by.bsuir.caloriestracker.request.EditorRequest;
 import by.bsuir.caloriestracker.response.EditorResponse;
@@ -14,8 +15,7 @@ public class EditorController {
     private final EditorService editorService;
 
     @PostMapping("/add")
-    public Editor addEditor(@RequestBody EditorRequest request){
-
+    public EditorDto addEditor(@RequestBody EditorRequest request){
         return editorService.addEditor(request);
     }
 

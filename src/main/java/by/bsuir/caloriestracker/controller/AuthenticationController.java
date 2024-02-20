@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/authorize")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
-
     @PostMapping
     public AuthenticationResponse authorize(@RequestBody UserAuthenticationRequest request){
         return authenticationService.authorize(request);
+    }
+    @GetMapping("/logout")
+    public void logOut(){
+        authenticationService.logout();
     }
 }

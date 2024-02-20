@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,11 +27,11 @@ public class Recipe {
     @CollectionTable(name = "recipe_product")
     @MapKeyColumn(name = "product_id")
     @Column(name = "weight")
-    private Map<Product, Integer> ingredients;
+    private Map<Product, Integer> ingredients = new HashMap<>();
     private String instruction;
     @ManyToOne
     private Editor editor;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_favourite_recipes")
-    private List<User> likedUserList;
+    private List<User> likedUserList = new ArrayList<>();
 }

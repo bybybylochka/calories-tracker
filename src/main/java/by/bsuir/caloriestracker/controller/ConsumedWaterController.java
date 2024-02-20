@@ -1,5 +1,6 @@
 package by.bsuir.caloriestracker.controller;
 
+import by.bsuir.caloriestracker.dto.ConsumedWaterDto;
 import by.bsuir.caloriestracker.models.ConsumedWater;
 import by.bsuir.caloriestracker.response.ConsumedWaterHistoryResponse;
 import by.bsuir.caloriestracker.response.ConsumedWaterResponse;
@@ -16,7 +17,7 @@ public class ConsumedWaterController {
     private final ConsumedWaterService consumedWaterService;
 
     @PostMapping
-    public ConsumedWater addConsumedWater(@RequestParam int volume) {
+    public ConsumedWaterDto addConsumedWater(@RequestParam int volume) {
         return consumedWaterService.addConsumedWater(volume);
     }
 
@@ -40,8 +41,8 @@ public class ConsumedWaterController {
         consumedWaterService.updateVolume(consumedWaterId, volume);
     }
 
-    @DeleteMapping("/{consumedWaterId}")
-    public ConsumedWater deleteConsumedWater(@PathVariable long consumedWaterId) {
-        return consumedWaterService.deleteConsumedWater(consumedWaterId);
+    @DeleteMapping()
+    public ConsumedWaterDto deleteConsumedWater(@RequestParam int volume) {
+        return consumedWaterService.deleteConsumedWater(volume);
     }
 }

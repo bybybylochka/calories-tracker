@@ -39,14 +39,14 @@ public class EditorService {
                 .orElseThrow(() -> new IllegalArgumentException("Editor with such username not found"));
     }
 
-    public Editor addEditor(EditorRequest request){
+    public EditorDto addEditor(EditorRequest request){
         AuthorizationData authorizationData = authorizationDataService
                 .addAuthorizationData(request.getAuthenticationData());
         Editor editor = buildEditor(request, authorizationData);
-        return editorRepository.save(editor);
+        Editor savedEditor = editorRepository.save(editor);
+        return toDto(savedEditor);
     }
-    public void addArticle(long editorId, Article article){
-        Editor editor = findById(editorId);
+    public void addArticle(Editor editor, Article article){
         List<Article> articles = editor.getArticles();
         articles.add(article);
         editor.setArticles(articles);
@@ -83,6 +83,7 @@ public class EditorService {
 
     private double getWeekActivity(Editor editor) {
         int totalPostCount = editor.getRecipes().size() + editor.getArticles().size();
+        if(totalPostCount==0) return 0;
         LocalDate registrationDate = editor.getAuthorizationData().getCreatedAt();
         int daysSinceRegistration = Period.between(registrationDate, LocalDate.now()).getDays();
         return ((double) daysSinceRegistration / 7) / totalPostCount;

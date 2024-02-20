@@ -6,6 +6,7 @@ import by.bsuir.caloriestracker.models.User;
 import by.bsuir.caloriestracker.repository.ConsumedWaterRepository;
 import by.bsuir.caloriestracker.response.ConsumedWaterHistoryResponse;
 import by.bsuir.caloriestracker.response.ConsumedWaterResponse;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +31,10 @@ public class ConsumedWaterService {
     public ConsumedWaterResponse findAll() {
         List<ConsumedWater> consumedWaterList = consumedWaterRepository.findAll();
         List<ConsumedWaterDto> dtoList = consumedWaterList.stream().map(this::toDto).toList();
-        return new ConsumedWaterResponse(dtoList);
+        int volume = dtoList.stream()
+                .mapToInt(ConsumedWaterDto::getVolume)
+                .reduce(0, Integer::sum);
+        return new ConsumedWaterResponse(dtoList, volume);
     }
 
 //    public ConsumedWaterResponse getConsumedWaterByUser() {
@@ -44,9 +48,10 @@ public class ConsumedWaterService {
         return consumedWaterRepository.findAllByUser(currentUser);
     }
 
-    public ConsumedWater addConsumedWater(int volume) {
+    public ConsumedWaterDto addConsumedWater(int volume) {
         ConsumedWater consumedWater = buildConsumedWater(volume);
-        return consumedWaterRepository.save(consumedWater);
+        ConsumedWater savedConsumedWater = consumedWaterRepository.save(consumedWater);
+        return toDto(savedConsumedWater);
     }
 
     public ConsumedWaterResponse findConsumedWaterByDate(LocalDate date) {
@@ -55,7 +60,10 @@ public class ConsumedWaterService {
                 consumedWater.getConsumptionTime().getDayOfYear() == date.getDayOfYear()
         ).toList();
         List<ConsumedWaterDto> dtoList = consumedWaterByDate.stream().map(this::toDto).toList();
-        return new ConsumedWaterResponse(dtoList);
+        int volume = dtoList.stream()
+                .mapToInt(ConsumedWaterDto::getVolume)
+                .reduce(0, Integer::sum);
+        return new ConsumedWaterResponse(dtoList, volume);
     }
 
     public ConsumedWaterHistoryResponse findConsumedWaterHistory() {
@@ -90,9 +98,9 @@ public class ConsumedWaterService {
                 .build();
     }
 
-    public ConsumedWater deleteConsumedWater(long consumedWaterId) {
-        ConsumedWater consumedWater = findById(consumedWaterId);
-        consumedWaterRepository.delete(consumedWater);
-        return consumedWater;
+    public ConsumedWaterDto deleteConsumedWater(int volume) {
+        ConsumedWater consumedWater = buildConsumedWater(volume * (-1));
+        ConsumedWater savedConsumedWater = consumedWaterRepository.save(consumedWater);
+        return toDto(savedConsumedWater);
     }
 }
